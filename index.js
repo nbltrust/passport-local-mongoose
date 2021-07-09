@@ -53,6 +53,18 @@ module.exports = function(schema, options) {
     options.interval = options.interval || 100; // 100 ms
     options.maxInterval = options.maxInterval || 300000; // 5 min
     options.maxAttempts = options.maxAttempts || Infinity;
+    // not interval attempts
+    options.noIntervalAttempts = options.noIntervalAttempts || 0;
+    // default attempts interval calculator
+    function defaultAttemptsIntervalCalculator(attempts) {
+      return Math.pow(options.interval, Math.log(attempts + 1));
+    }
+    options.attemptsIntervalCalculator = options.attemptsIntervalCalculator || defaultAttemptsIntervalCalculator
+    function defaultAttemptsTooSoonSideEffect(user, options) {
+      user.set(options.lastLoginField, Date.now());
+      // user.set(options.attemptsField, user.get(options.attemptsField) + 1);
+    }
+    options.attemptsTooSoonSideEffect = options.attemptsTooSoonSideEffect || defaultAttemptsTooSoonSideEffect
   }
 
   options.findByUsername =
