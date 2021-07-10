@@ -53,7 +53,6 @@ module.exports = function (schema, options) {
   }
   function defaultAttemptsTooSoonSideEffect(user, options) {
     user.set(options.lastLoginField, Date.now());
-    // user.set(options.attemptsField, user.get(options.attemptsField) + 1);
   }
 
   if (options.limitAttempts) {
